@@ -1,5 +1,6 @@
 import os
 import errno
+import shutil
 
 
 class Directory (object):
@@ -16,3 +17,12 @@ class Directory (object):
         except OSError as exception:
             if exception != errno.EEXIST:
                 raise
+
+    @staticmethod
+    def _delete_directory(path):
+        """Метод удаления директории
+
+        :param path: Путь к директории
+        :return: Ничего не возвращает
+        """
+        shutil.rmtree(path, ignore_errors=False)
