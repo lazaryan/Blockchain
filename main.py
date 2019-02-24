@@ -1,6 +1,5 @@
-from keys import Keys
+from system_directory import SystemDirectory
 
-keys = Keys()
-keys.set_public_key('private_key')
-keys.set_private_key('public_key')
-
+system = SystemDirectory()
+system.set_public_key('test_key')
+system.set_private_key('test_key2')

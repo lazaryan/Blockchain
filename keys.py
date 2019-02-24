@@ -21,6 +21,8 @@ class Keys(Files):
         if not os.path.isfile(self.__path_to_file):
             self._create_file_key()
 
+        self.write_default_keys_form()
+
     def write_default_keys_form(self):
         """Записывает в файл стартовую форму (секции и имена ключей)"""
         if not os.path.isfile(self.__path_to_file):
