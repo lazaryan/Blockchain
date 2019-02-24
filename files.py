@@ -27,7 +27,7 @@ class Files(Directory):
 
     def _clear_file(self, path_to_file):
         """Очищает файл"""
-        self.__crate_file(path_to_file)
+        self.__crate_file(path_to_file, 'w')
 
     @staticmethod
     def _is_not_zero_file(path_to_file):
