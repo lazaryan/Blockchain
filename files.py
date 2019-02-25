@@ -20,14 +20,24 @@ class Files(Directory):
 
         if os.path.exists(path):
             if not os.path.exists(path_to_file):
-                self.__crate_file(path_to_file)
+                open(path_to_file, 'w').close()
         else:
             self._create_directory(path)
-            self.__crate_file(path_to_file)
+            open(path_to_file, 'w').close()
 
-    def _clear_file(self, path_to_file):
-        """Очищает файл"""
-        self.__crate_file(path_to_file, 'w')
+    @staticmethod
+    def _clear_file(path_to_file):
+        """Очищает файл если он существует"""
+        if not os.path.isfile(path_to_file):
+            return ''
+
+        open(path_to_file, 'w').close()
+
+    @staticmethod
+    def _delete_file(path_to_file=''):
+        """Метод для удаления файла"""
+        if os.path.isfile(path_to_file):
+            os.remove(path_to_file)
 
     @staticmethod
     def _is_not_zero_file(path_to_file):
@@ -37,13 +47,3 @@ class Files(Directory):
         :return: Возвращает Boolean значение
         """
         return os.path.isfile(path_to_file) and os.path.getsize(path_to_file) > 0
-
-    @staticmethod
-    def __crate_file(path_to_file, flag='w'):
-        """Создание файла
-
-        :param path_to_file: Путь к файлу
-        :param flag: Флаг с которым нужно открыть файл (по умолчанию с очисткой, если он существует)
-        :return:
-        """
-        open(path_to_file, flag).close()
