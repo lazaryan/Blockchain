@@ -1,6 +1,6 @@
 import os
 
-from json_files import JsonFiles
+from fs.json_files import JsonFiles
 
 import constants
 
