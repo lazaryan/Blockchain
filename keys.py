@@ -1,11 +1,10 @@
 import os
-from configparser import ConfigParser
 
-from files import Files
+from json_files import JsonFiles
 import constants
 
 
-class Keys(Files):
+class Keys(JsonFiles):
     """Класс для работы с ключами приложения"""
     def __init__(self):
         super().__init__()
@@ -18,31 +17,22 @@ class Keys(Files):
 
         self.__path_to_file = os.path.join(path, name_file)
 
-        if not os.path.isfile(self.__path_to_file):
-            self._create_file_key()
-
         self.write_default_keys_form()
 
     def write_default_keys_form(self):
         """Записывает в файл стартовую форму (секции и имена ключей)"""
+        data = dict()
+        data[self.SECTION_PUBLIC_KEYS] = {}
+        data[self.SECTION_PUBLIC_KEYS]['key'] = ''
+
+        data[self.SECTION_PRIVATE_KEYS] = {}
+        data[self.SECTION_PRIVATE_KEYS]['key'] = ''
+
         if not os.path.isfile(self.__path_to_file):
-            self._create_file_key()
+            self.__create_file_key(data)
 
         if self._is_not_zero_file(self.__path_to_file):
             return ''
-
-        config = ConfigParser()
-        config.read(self.__path_to_file)
-
-        config.add_section(self.SECTION_PRIVATE_KEYS)
-        config.add_section(self.SECTION_PUBLIC_KEYS)
-
-        config.set('public_key', 'key', '')
-
-        config.set('private_key', 'key', '')
-
-        with open(self.__path_to_file, 'w') as configfile:
-            config.write(configfile)
 
     def set_public_key(self, key=''):
         """Внесение публичного ключа
@@ -54,7 +44,6 @@ class Keys(Files):
         :return: Ничего не возвращает
         """
         if not self._is_not_zero_file(self.__path_to_file):
-            self._create_file_key()
             self.write_default_keys_form()
 
         self.__set_key(self.__path_to_file, self.SECTION_PUBLIC_KEYS, key)
@@ -69,7 +58,6 @@ class Keys(Files):
         :return: Ничего не возвращает
         """
         if not self._is_not_zero_file(self.__path_to_file):
-            self._create_file_key()
             self.write_default_keys_form()
 
         self.__set_key(self.__path_to_file, self.SECTION_PRIVATE_KEYS, key)
@@ -88,12 +76,11 @@ class Keys(Files):
 
         return self.__get_key(self.__path_to_file, self.SECTION_PRIVATE_KEYS)
 
-    def _create_file_key(self):
+    def __create_file_key(self, data=()):
         """Создание файла для ключей"""
-        self._create_file(self.__path_to_file)
+        self._create_file(self.__path_to_file, data)
 
-    @staticmethod
-    def __set_key(path_to_file, section, key):
+    def __set_key(self, path_to_file, section, key):
         """Запись ключа
 
         :param path_to_file: Путь к файлу
@@ -101,16 +88,17 @@ class Keys(Files):
         :param key: Значение ключа
         :return: Ничего не возвращает
         """
-        config = ConfigParser()
-        config.read(path_to_file)
+        data = self._get_json(path_to_file)
 
-        config.set(section, 'key', key)
+        try:
+            data[section]['key'] = key
+        except KeyError:
+            data[section] = {}
+            data[section]['key'] = key
 
-        with open(path_to_file, 'w') as configfile:
-            config.write(configfile)
+        self._write_data(path_to_file, data)
 
-    @staticmethod
-    def __get_key(path_to_file, section, name_key='key'):
+    def __get_key(self, path_to_file, section, name_key='key'):
         """Возвращает сохраненный ключ
 
         :param path_to_file: Путь к файлу
@@ -118,7 +106,9 @@ class Keys(Files):
         :param name_key: Имя ключа
         :return: Ключ
         """
-        config = ConfigParser()
-        config.read(path_to_file)
+        data = self._get_json(path_to_file)
 
-        return config.get(section, name_key)
+        try:
+            return data[section][name_key]
+        except KeyError:
+            return ''

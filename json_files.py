@@ -9,7 +9,7 @@ class JsonFiles(Files):
     def __init__(self):
         super().__init__()
 
-    def _create_file(self, path_to_file):
+    def _create_file(self, path_to_file, default_data=''):
         """Метод для создания файла
 
         Безопасно создает файл и все необходимые пути для этого
@@ -27,12 +27,12 @@ class JsonFiles(Files):
             self._create_directory(path)
             open(path_to_file, 'w').close()
 
-        self._write_default_data(path_to_file)
+        self._write_default_data(path_to_file, default_data)
 
-    def _write_default_data(self, path_to_file=''):
+    def _write_default_data(self, path_to_file='', default_data=''):
         """Записывает дефолтную структуру в файл"""
         if not self._is_not_zero_file(path_to_file):
-            self._write_data(path_to_file, '')
+            self._write_data(path_to_file, default_data)
 
     def _get_property(self, path_to_file='', property_name=''):
         """Метод получения значения свойства объекта из файла
