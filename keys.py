@@ -6,7 +6,7 @@ import constants
 
 class Keys(JsonFiles):
     """Класс для работы с ключами приложения"""
-    def __init__(self):
+    def __init__(self, login=''):
         super().__init__()
 
         self.SECTION_PUBLIC_KEYS = 'public_key'
@@ -14,6 +14,11 @@ class Keys(JsonFiles):
 
         path = constants.DIRECTORY_SYSTEM
         name_file = constants.NAME_FILE_KEY
+
+        if login:
+            name_file = name_file.replace('[name]', login)
+        else:
+            name_file = name_file.replace('-[name]', '')
 
         self.__path_to_file = os.path.join(path, name_file)
 
