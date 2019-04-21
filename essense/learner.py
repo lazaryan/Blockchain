@@ -16,6 +16,7 @@ class Learner(ActionLearner):
 
     def __init__(self, start=False):
         super().__init__()
+        self.__clear_start_files()
 
         if start:
             self.start()
@@ -41,23 +42,41 @@ class Learner(ActionLearner):
             self.__check_network()
 
     @pause(__PAUSE_CHECK_USERS__)
+    @thread
     def __check_network(self):
         users = self.__json__.get_json(Const.PATH_TO_LIST_USERS)
+        data = self.__json__.get_json(Const.PATH_TO_DATA)
 
         if not users:
             return
 
-        count_action_users = 0
+        body = {}
+
+        if data:
+            if data.get('id'):
+                body["id"] = data["id"]
+
+        dis_active_users = []
+        active_users = {}
 
         for id_user, data_user in users.items():
-            message = self.__network__.create_message("lerner_check-active", {})
+            message = self.__network__.create_message("lerner_check-active", body)
             success = self.__network__.send(data_user["ip"], Const.PORT_USER, message)
 
             if success:
-                count_action_users += 1
+                active_users[id_user] = data_user
+            else:
+                dis_active_users.append(id_user)
 
-        print('action users: ' + str(count_action_users))
+        print('action users: ' + str(len(active_users)))
+
+        change = self.change_action_users(active_users, dis_active_users)
+        print(change)
 
     def __get_message(self, message):
         """Метод обработки всех пришедших сообщений"""
         self._action(message)
+
+    def __clear_start_files(self):
+        """Очистка файлов и дерикторий, оставшихся после последнего запуска"""
+        self.__json__.delete_file(Const.PATH_TO_LIST_USERS_ACTION)

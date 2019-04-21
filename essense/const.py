@@ -6,9 +6,11 @@ class Const(object):
     """
     PATH_TO_FILES = './data'
 
+    PATH_TO_DATA = PATH_TO_FILES + '/data.json'
     PATH_TO_LIST = PATH_TO_FILES + '/list'
 
     PATH_TO_LIST_USERS = PATH_TO_LIST + '/users.json'
+    PATH_TO_LIST_USERS_ACTION = PATH_TO_LIST + '/action_users.json'
     PATH_TO_LIST_LEARNERS = PATH_TO_LIST + '/learners.json'
 
     """

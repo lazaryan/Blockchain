@@ -50,15 +50,16 @@ class JsonFiles(Files):
         if len(path) == 1:
             if not path[0]:
                 return data
-            try:
+
+            if data.get(path[0]):
                 data[path[0]] = value
-            except KeyError:
+            else:
                 data[path[0]] = {}
                 data[path[0]] = value
         else:
-            try:
+            if data.get(path[0]):
                 data[path[0]] = self.set_prop(data[path[0]], path[1], value)
-            except KeyError:
+            else:
                 data[path[0]] = {}
                 data[path[0]] = self.set_prop(data[path[0]], path[1], value)
 
@@ -77,9 +78,21 @@ class JsonFiles(Files):
         path = str(prop).split('.', 1)
 
         if len(path) == 1:
-            try:
-                return data[path[0]]
-            except KeyError:
-                return {}
+            return data[path[0]] if data.get(path[0]) else {}
         else:
             return self.get_prop(data[path[0]], path[1])
+
+    def create_file(self, path_to_file=''):
+        """Создает файл и производит все необходимые проверки
+
+        Метод создает при необходимости все необходимые директории
+        Если файл уже существует - он не пересоздается
+
+        :param path_to_file: Путь к файлу
+        :return:
+        """
+        self._create_file(path_to_file)
+
+    def delete_file(self, path_to_file=''):
+        """Очищает файл если он существует"""
+        self._delete_file(path_to_file)

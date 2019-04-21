@@ -1,7 +1,7 @@
 import socket
 import json
-import urllib.request
-import urllib.error
+from urllib.request import urlopen
+from urllib.error import URLError
 from essense.secondary.decorators import *
 
 
@@ -91,8 +91,8 @@ class Network(object):
         :return: <str> ip адресс пользователя в интернете
         """
         try:
-            return urllib.request.urlopen('http://ip-address.ru/show').read().decode('utf-8')
-        except urllib.error.URLError:
+            return urlopen('http://ip-address.ru/show').read().decode('utf-8')
+        except URLError:
             return ''
 
     @staticmethod
