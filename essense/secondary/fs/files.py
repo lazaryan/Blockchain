@@ -1,5 +1,5 @@
 import os
-from fs.directorys import Directory
+from essense.secondary.fs.directorys import Directory
 
 
 class Files(Directory):
@@ -39,11 +39,11 @@ class Files(Directory):
         if os.path.isfile(path_to_file):
             os.remove(path_to_file)
 
-    @staticmethod
-    def _is_not_zero_file(path_to_file):
-        """Проверяет файл на пустоту
+    def is_zero_file(self, path_to_file=''):
+        """Метод проверки пустоты файла"""
+        return (not self.is_file(path_to_file)) or os.path.getsize(path_to_file) == 0
 
-        :param path_to_file: Путь к файлу
-        :return: Возвращает Boolean значение
-        """
-        return os.path.isfile(path_to_file) and os.path.getsize(path_to_file) > 0
+    @staticmethod
+    def is_file(path_to_file=''):
+        """Метод проверки файла"""
+        return os.path.isfile(path_to_file)

@@ -1,5 +1,5 @@
-from system_directory import SystemDirectory
+from essense.learner import Learner
 
-system = SystemDirectory()
-system.set_public_key('test_key')
-system.set_private_key('test_key2')
+learner = Learner()
+learner.start()
+
