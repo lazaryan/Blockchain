@@ -1,5 +1,5 @@
 from essense.secondary.fs.json_files import JsonFiles
-from essense.const import Const
+from const import Const
 
 
 class ActionLearner(object):
@@ -12,30 +12,13 @@ class ActionLearner(object):
         :param message: <obj> Объект запроса
         :return:
         """
-        pass
+        type_message = self.__json__.get_prop(message, 'header.type').split('_')
 
-    def change_action_users(self, action_users, dis_active_users):
-        """
-        Метод проверки изменения активности пользователей
-        Если какой-то пользователь зашел в сеть или же наоборот вышел, то данные об этом обновляются
-        :param action_users: <obj> json объект активных пользователей
-        :param dis_active_users: <arr str> Массив id пользователей, которые сейчас не в сети
-        :return: <obj> json объект, в котором указаны изменния активности
-        """
-        change = {"action": [], "dis_active": []}
-        users = self.__json__.get_json(Const.PATH_TO_LIST_USERS_ACTION)
+        if type_message[0] == 'learner':
+            pass
 
-        for id_user, data in action_users.items():
-            if not users.get(id_user):
-                change["action"].append(id_user)
-                users[id_user] = data
-
-        for id_user in dis_active_users:
-            if not users.get(id_user) is None:
-                change["dis_active"].append(id_user)
-                del users[id_user]
-
-        if change["action"] or change["dis_active"]:
-            self.__json__.set_json_in_file(Const.PATH_TO_LIST_USERS_ACTION, action_users)
-
-        return change
+        elif type_message[0] == 'user':
+            if type_message[1] == 'check-action':
+                print('CHECK ACTION!!!')
+            elif type_message[1] == 'enter':
+                print('ENTER!!!')

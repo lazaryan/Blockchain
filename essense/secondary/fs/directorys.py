@@ -6,7 +6,7 @@ import shutil
 class Directory (object):
     """Класс для работы с директориями"""
     @staticmethod
-    def _create_directory(path=''):
+    def create_directory(path=''):
         """Создает директорию
 
         :param path: Путь к директории
@@ -19,7 +19,7 @@ class Directory (object):
                 raise
 
     @staticmethod
-    def _delete_directory(path):
+    def delete_directory(path):
         """Метод удаления директории
 
         :param path: Путь к директории
@@ -28,7 +28,7 @@ class Directory (object):
         shutil.rmtree(path, ignore_errors=False)
 
     @staticmethod
-    def _clear_directory(path):
+    def clear_directory(path):
         """Метод очистки директории
 
         Метод очищает все содержимое директории

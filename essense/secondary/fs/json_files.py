@@ -30,7 +30,7 @@ class JsonFiles(Files):
         :return: <bool> Успешность опперации
         """
         if not self.is_file(path_to_file):
-            self._create_file(path_to_file)
+            self.create_file(path_to_file)
 
         with open(path_to_file, 'w') as file:
             json.dump(data, file)
@@ -81,18 +81,3 @@ class JsonFiles(Files):
             return data[path[0]] if data.get(path[0]) else {}
         else:
             return self.get_prop(data[path[0]], path[1])
-
-    def create_file(self, path_to_file=''):
-        """Создает файл и производит все необходимые проверки
-
-        Метод создает при необходимости все необходимые директории
-        Если файл уже существует - он не пересоздается
-
-        :param path_to_file: Путь к файлу
-        :return:
-        """
-        self._create_file(path_to_file)
-
-    def delete_file(self, path_to_file=''):
-        """Очищает файл если он существует"""
-        self._delete_file(path_to_file)

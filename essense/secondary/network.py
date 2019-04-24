@@ -1,5 +1,6 @@
 import socket
 import json
+import datetime
 from urllib.request import urlopen
 from urllib.error import URLError
 from essense.secondary.decorators import *
@@ -33,7 +34,7 @@ class Network(object):
 
         while True:
             sock.listen(listener)
-            conn, addr = sock.accept()
+            conn, address = sock.accept()
             message = conn.recv(1023).decode()
 
             if callback:
@@ -55,15 +56,19 @@ class Network(object):
             return False
         except ConnectionRefusedError:
             return False
+        except OSError:
+            return False
 
         sock.send(message)
         sock.close()
 
         return True
 
-    def create_message(self, type_message, data):
+    @staticmethod
+    def create_message(id_user, type_message, data):
         """
         Метод для создания тела сообщение другимпользователям
+        :param id_user: <str> id пользователя
         :param type_message: <str> Тип передоваемого сообщения
         :param data: <all> Тело сообщения. может быть любым типом данных, который используется в json стандарте
         :return: <str> Строковое представление объекта
@@ -71,8 +76,8 @@ class Network(object):
         message = {
             "header": {
                 "type": type_message,
-                "ip": self.get_local_ip(),
-                "ip_global": self.get_global_ip()
+                "id": id_user,
+                "time": datetime.datetime.today().timestamp()
             },
             "data": data
         }

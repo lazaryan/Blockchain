@@ -7,7 +7,7 @@ class Files(Directory):
     def __init__(self):
         super().__init__()
 
-    def _create_file(self, path_to_file):
+    def create_file(self, path_to_file):
         """Создает файл и производит все необходимые проверки
 
         Метод создает при необходимости все необходимые директории
@@ -22,11 +22,11 @@ class Files(Directory):
             if not os.path.exists(path_to_file):
                 open(path_to_file, 'w').close()
         else:
-            self._create_directory(path)
+            self.create_directory(path)
             open(path_to_file, 'w').close()
 
     @staticmethod
-    def _clear_file(path_to_file):
+    def clear_file(path_to_file):
         """Очищает файл если он существует"""
         if not os.path.isfile(path_to_file):
             return ''
@@ -34,7 +34,7 @@ class Files(Directory):
         open(path_to_file, 'w').close()
 
     @staticmethod
-    def _delete_file(path_to_file=''):
+    def delete_file(path_to_file=''):
         """Метод для удаления файла"""
         if os.path.isfile(path_to_file):
             os.remove(path_to_file)
