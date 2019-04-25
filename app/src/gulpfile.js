@@ -39,7 +39,7 @@ gulp.task('js', () => {
     return gulp.src(`${SRC}/js/**/*.js`)
         .pipe(plumber())
         .pipe(babel({
-            presets: ['env']
+            presets: ['@babel/preset-env']
         }))
         .pipe(gulpif(!IsDevelopment, uglify()))
         .pipe(gulp.dest(`${DIST}/js`));
